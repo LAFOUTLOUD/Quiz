@@ -1,90 +1,107 @@
-// Part 7 - the code has been made private, just in case another programmer uses it
-function fnName() {
-	
-	return function() {
+// we use the IIFE technique to make the entire code self-contained
+(function() {
 
-var Question, question1, question2, question3, question4, question5, questionArray;
+// groups all of the vars together
+var divide, gamePlaying, Question, response, score;
 
-// Part 1 - we create a F.C. called 'Question'
-Question = function(question, possibleAnswers, correctAnswer, multiChoice) {
-	
-	// the question being asked
-	this.question = question;
-	
-	// the answers from which the player can choose the correct one
-	this.possibleAnswers = possibleAnswers;
-	
-	// correct answer
-	this.correctAnswer = correctAnswer;
-	
-	// Part 4 - select a random question, log it to the console w/ the answers
-	this.multiChoice = function() {
+gamePlaying = true;
 
-		// Part 5 - use the Window.prompt() fn to ask for the correct answer
-		var response = prompt(
+divide = '------------------------';
+
+score = 0;
+
+Question = function(question, answers, correct, random) {
 			
-			// 1. the first parameter displays text in the PROMPT window
+	this.question = question;
+			
+	this.answers = answers;
+			
+	this.correct = correct;
+			
+	this.random = function() {
+				
+		if (gamePlaying) {
+
+			response = prompt(
+
 			'Please select the correct answer (just type the number)',
 
-			// 2. the PROMPT logs the current question and the choices to the console so the user can see the choices
-			console.log(this.question, this.possibleAnswers) );
-		
-			// checks to see if the answer is correct
-			this.checkAnswer = function() {
+			console.log( this.question, this.answers )
 
-				// if the response is correct
-				if( response === correctAnswer ) { 
+			);
+
+			if (response === correct) {
+				
+				score = score += 1;
+
+				console.log('Correct!');
+				this.score();
+				console.log(divide);
+
+				nextQuestion();
+
+			}
+
+			else if (response === 'EXIT') {
+
+				endGame();
+
+			}
+
+			else {
+
+				console.log('Wrong answer. Try again :)');
+				console.log(divide);
+
+				nextQuestion();
+				
+			}
 			
-					// displays a response
-					console.log('Correct Answer!')
+		};
+	}
+			
+			this.score = function() {
+				console.log('Your current score is: ' + score);
+			}
+		};
 
-				}
-		
-				// if the response is wrong
-				else {
+// all the INSTANCES 
+q1 = new Question(
+			'What is the highest-grossing film?',
+			['0: Avatar', '1: Endgame', '2: Frozen', '3: Jurassic World'], '1'),
 
-					console.log('Wrong Answer!')
+q2 = new Question(
+			'What is the highest-grossing media franchise?',
+			['0: Dragon Ball', '1: Mario', '2: Pokemon', '3: Star Wars'], '2' ),
 
-				}
-			};
-	};
-};
+q3 = new Question(
+			'What is the best-selling manga?',
+			['0: Case Closed', '1: Dragon Ball', '2: Naruto', '3: One Piece'], '3' ),
 
-// Part 2 & Part 3 - create a couple of questions using the constructor, we store all INSTANCES in an array
-questionArray = [
+q4 = new Question(
+			'What is the best-selling album?',
+			['0: Back in Black\' by AC/DC', '1: Bat out of Hell\' by Meatloaf', '2: The Dark Side of the Moon\' by Pink Floyd', '3: Thriller\' by Michael Jackson'], '3' ),
 
-	// Instance 1: Movie Question
-	question1 = new Question(
-		'What is the highest-grossing film?',
-		['0: Avatar', '1: Endgame', '2: Frozen', '3: Jurassic World'], '1'),
+q5 = new Question(
+			'Who Framed Roger Rabbit was released in 1988.', 
+			['0: Yes', '1: No'], '0')
 
-	// Instance 2: Media Question
-	question2 = new Question(
-		'What is the highest-grossing media franchise?',
-		[ '0: Dragon Ball', '1: Mario', '2: Pokemon', '3: Star Wars'], '2' ),
-	
-	// Instance 3: Manga Question
-	question3 = new Question(
-		'What is the best-selling manga?',
-		['0: Case Closed', '1: Dragon Ball', '2: Naruto', '3: One Piece'], '3' ),
-	
-	// Instance 4: Album Question
-	question4 = new Question(
-		'What is the best-selling album?',
-		['0: Back in Black\' by AC/DC', '1: Bat out of Hell\' by Meatloaf', '2: The Dark Side of the Moon\' by Pink Floyd', '3: Thriller\' by Michael Jackson'], '3' ),
-	
-	// Instance 5: True or False
-	question5 = new Question(
-		'Who Framed Roger Rabbit was released in 1988.', 
-		['0: Yes', '1: No'], '0')
-];
+// all the vars for the INSTANCES are stored in the questions ARRAY
+var questions = [q1,q2,q3,q4,q5];
 
-	
-questionArray[4].multiChoice();
-questionArray[4].checkAnswer();
+		function nextQuestion() {
 
-	};
-};
+			questions[Math.floor( Math.random() * 5 )].random();
+					
+		};
 
-// both functions are called at the same time
-fnName()();
+		function endGame() {
+
+			console.log('Refresh to start again');
+			gamePlaying = false;
+
+		};
+
+questions[Math.floor( Math.random() * 5 )].random();
+
+})();
